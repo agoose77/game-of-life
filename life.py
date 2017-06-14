@@ -1,18 +1,20 @@
+from time import sleep
+
 import numpy as np
-from matplotlib import pyplot as plt
 from asciimatics.event import KeyboardEvent, MouseEvent
 from asciimatics.screen import Screen
+from matplotlib import pyplot as plt
 
 
 def init_board(width: int, height: int) -> np.ndarray:
-    return np.random.randint(0,2, size=(width, height), dtype=np.bool_)
+    return np.random.randint(0, 2, size=(width, height), dtype=np.bool_)
 
 
 def evolve_board(board: np.ndarray):
     int_board = board.astype(np.int)
     neighbours = int_board[0:-2, 0:-2] + int_board[0:-2, 1:-1] + int_board[0:-2, 2:] + \
                  int_board[1:-1, 0:-2] + int_board[1:-1, 2:] + \
-                 int_board[2:  , 0:-2] + int_board[2:  , 1:-1] + int_board[2:  , 2:]
+                 int_board[2:, 0:-2] + int_board[2:, 1:-1] + int_board[2:, 2:]
 
     birth = (neighbours == 3) & (int_board[1:-1, 1:-1] == 0)
     survive = ((neighbours == 2) | (neighbours == 3)) & (int_board[1:-1, 1:-1] == 1)
@@ -38,10 +40,6 @@ def show_board(board: np.ndarray, screen):
     screen.refresh()
 
 
-
-from time import sleep
-np.random.seed(999)
-
 def draw(screen):
     board = init_board(64, 64)
 
@@ -61,7 +59,7 @@ def draw(screen):
                 y = event.y
                 x = event.x // 2
                 if y in range(board.shape[0]) and x in range(board.shape[1]):
-                    board[y, x]=1
+                    board[y, x] = 1
 
 
 if __name__ == "__main__":
